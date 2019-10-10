@@ -79,6 +79,8 @@ func (tableClient *TableClient) Store(forecast weather.Forecast) error {
 				continue
 			}
 		} else {
+			updateRowChange.PutColumn("city", forecast.City)
+			updateRowChange.PutColumn("province", forecast.Province)
 			updateRowChange.PutColumn("reporttime", forecast.Reporttime)
 			updateRowChange.PutColumn("week", cast.Week)
 			updateRowChange.PutColumn("dayweather", cast.Dayweather)
