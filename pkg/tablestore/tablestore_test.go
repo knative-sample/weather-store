@@ -3,16 +3,18 @@ package tablestore
 import (
 	"testing"
 
+	"fmt"
+
 	"github.com/aliyun/aliyun-tablestore-go-sdk/tablestore"
 	"github.com/knative-sample/weather-store/pkg/weather"
 )
 
 func FakeInitClient() *TableClient {
 	endpoint := "https://xxx.cn-beijing.ots.aliyuncs.com" //实例访问地址
-	tableName := "weather"
-	instanceName := "knative-weather"
-	accessKeyId := "xx"
-	accessKeySecret := "xx"
+	tableName := "weather"                                // 表名
+	instanceName := "knative-weather"                     // 实例名
+	accessKeyId := "xx"                                   // AccessKey ID
+	accessKeySecret := "xx"                               //Access Key Secret
 	client := tablestore.NewClient(endpoint, instanceName, accessKeyId, accessKeySecret)
 	return &TableClient{
 		tableName: tableName,
@@ -41,5 +43,8 @@ func TestStore(t *testing.T) {
 		Province:   "北京",
 		Casts:      []weather.Cast{ct},
 	}
-	c.Store(f)
+	err := c.Store(f)
+	if err != nil {
+		fmt.Println(err.Error())
+	}
 }
