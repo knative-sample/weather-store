@@ -104,3 +104,29 @@ func (tableClient *TableClient) Store(forecast weather.Forecast) error {
 
 	return nil
 }
+
+func (tableClient *TableClient) StoreCity(cityInfo weather.CityInfo) error {
+	putRowRequest := new(tablestore.PutRowRequest)
+	putRowChange := new(tablestore.PutRowChange)
+	putRowChange.TableName = tableClient.tableName
+	putPk := &tablestore.PrimaryKey{}
+
+	putPk.AddPrimaryKeyColumn("adcode", cityInfo.Adcode)
+
+	putRowChange.PrimaryKey = putPk
+
+	uid, _ := uuid.NewV4()
+	putRowChange.AddColumn("id", uid.String())
+	putRowChange.AddColumn("name", cityInfo.Name)
+	putRowChange.AddColumn("citycode", cityInfo.Citycode)
+	putRowChange.AddColumn("iscity", cityInfo.IsCity)
+	putRowChange.SetCondition(tablestore.RowExistenceExpectation_IGNORE)
+	putRowRequest.PutRowChange = putRowChange
+	_, err := tableClient.client.PutRow(putRowRequest)
+	if err != nil {
+		glog.Errorf("PutRow failed with error: %s", err.Error())
+		return err
+	}
+
+	return nil
+}

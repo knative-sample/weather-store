@@ -37,6 +37,13 @@ type Cast struct {
 	Nightpower   string `json:"nightpower"`
 }
 
+type CityInfo struct {
+	Name     string `json:"name"`
+	Adcode   string `json:"adcode"`
+	Citycode string `json:"citycode"`
+	IsCity   string `json:"iscity"`
+}
+
 func QueryWeather(url, requestBody string) (body []byte, err error) {
 	client := &http.Client{
 		Timeout: 30 * time.Second,
